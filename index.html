@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roland & Dávid - A Legenda</title>
+    <style>
+        :root {
+            --primary: #ff66b3;
+            --secondary: #66b3ff;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --accent: #ffcc66;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.7);
+            animation: float 5s ease-in-out infinite;
+            opacity: 0;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+            animation: rainbow 5s linear infinite;
+        }
+        
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            14% { color: #ff7f00; }
+            28% { color: #ffff00; }
+            42% { color: #00ff00; }
+            57% { color: #0000ff; }
+            71% { color: #4b0082; }
+            85% { color: #9400d3; }
+            100% { color: #ff0000; }
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-style: italic;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Navigation */
+        nav {
+            background-color: rgba(0,0,0,0.7);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .nav-item:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Main content */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            text-align: center;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--primary);
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .card {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .stat-item {
+            background-color: rgba(0,0,0,0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .stat-title {
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.3rem;
+        }
+        
+        .quote {
+            font-style: italic;
+            padding: 1rem;
+            border-left: 3px solid var(--accent);
+            background-color: rgba(255,204,102,0.1);
+            margin: 1.5rem 0;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -1px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+            text-align: right;
+        }
+        
+        .right {
+            left: 50%;
+            text-align: left;
+        }
+        
+        .left::after {
+            right: -10px;
+        }
+        
+        .right::after {
+            left: -10px;
+        }
+        
+        .timeline-content {
+            padding: 15px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 8px;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 1rem 0.5rem 0.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .gallery-caption {
+            transform: translateY(0);
+        }
+        
+        /* Game stats */
+        .game-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .game-card {
+            flex: 1 1 300px;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        /* Compatibility meter */
+        .compatibility {
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        
+        .meter {
+            height: 30px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            width: 92%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            animation: fill 2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes fill {
+            from { width: 0; }
+            to { width: 92%; }
+        }
+        
+        .meter-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                          transparent, 
+                          rgba(255,255,255,0.3), 
+                          transparent);
+            animation: shine 2s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .meter-text {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .footer-text {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .social-link {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.2);
+        }
+        
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 1.5rem;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .timeline::before {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 21px;
+            }
+            
+            .left, .right {
+                left: 0;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="hearts" id="hearts-container"></div>
+        <h1>Roland & Dávid</h1>
+        <p class="subtitle">A történelem legepikusabb barátsága</p>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <div class="nav-item" onclick="showPage('home')">Kezdőlap</div>
+            <div class="nav-item" onclick="showPage('david')">Dávid</div>
+            <div class="nav-item" onclick="showPage('roland')">Roland</div>
+            <div class="nav-item" onclick="showPage('story')">Történetük</div>
+            <div class="nav-item" onclick="showPage('gallery')">Galéria</div>
+            <div class="nav-item" onclick="showPage('games')">Közös játékok</div>
+            <div class="nav-item" onclick="showPage('compatibility')">Összhang</div>
+            <div class="nav-item" onclick="showPage('future')">Jövőkép</div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="card pulse" style="text-align: center;">
+                <h2>Üdvözöljük a Roland & Dávid hivatalos oldalán!</h2>
+                <p>Ez az oldal a történelem legmeghatározóbb barátságát mutatja be minden részletében.</p>
+                <p>Fedezze fel a két legenda életét, kapcsolatuk fejlődését és a jövőbe vetett reményeiket!</p>
+            </div>
+            
+            <div class="card">
+                <h3>Gyors tények</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Ismeretség kezdete</div>
+                        <div>2023 környéke</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Közös játékok</div>
+                        <div>League of Legends, Sea of Thieves</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Napi beszélgetések</div>
+                        <div>6+ hónapig folyamatosan</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Legnagyobb közös ellenség</div>
+                        <div>Teemo (LoL-ból)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Legfrissebb hírek</h3>
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2025. február</div>
+                            <p>Dávid különleges gyűrűket rendelt, amelyek 02.07-én megérkeztek</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2024. december</div>
+                            <p>Roland és Dávid karácsonyi különleges Sea of Thieves sessiont tartottak</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2024. szeptember</div>
+                            <p>Dávid 16. születésnapját ünnepelték virtuális partyval</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2024. július</div>
+                            <p>Roland új AI projektjét mutatta be Dávidnak</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Kiemelt idézet</h3>
+                <div class="quote">
+                    "Csak veled tartok ilyen mély kapcsolatot." - Dávid Rolandnak
+                </div>
+                <p>Ez a mondat töképpen összefoglalja a két fiú kapcsolatának egyediségét és mélységét. Dávid, aki általában zárkózott és kevés emberrel osztja meg gondolatait, Rolandban megbízó társra talált.</p>
+            </div>
+        </div>
+        
+        <!-- Dávid Page -->
+        <div id="david" class="page">
+            <h2>Dávid - A Titokzatos Lelkek</h2>
+            
+            <div class="card">
+                <h3>Alap információk</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Teljes név</div>
+                        <div>Haas Dávid</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Születési dátum</div>
+                        <div>2008. szeptember 13.</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Életkor (2025-ben)</div>
+                        <div>16 éves</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Lakhely</div>
+                        <div>Budapest, 17. kerület</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Tanulmányok</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Iskola</div>
+                        <div>Budapesti Műszaki SzC Than Károly Technikum – Wesselényi Miklós telephely</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Évfolyam</div>
+                        <div>9. osztály</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Tanulmányi átlag</div>
+                        <div>3,7 és 5 között</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Cél</div>
+                        <div>Programozó egyetem</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Külső jellemzők</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Testalkat</div>
+                        <div>Vékony, ektomorf</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Hajszín</div>
+                        <div>Fekete</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Viselkedés</div>
+                        <div>Titokzatos, keveset árul el</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Személyiség</h3>
+                <p>Dávid komplex személyiség, aki számos ellentmondást hordoz magában:</p>
+                <div class="quote">
+                    "Élek még" - Dávid életfilozófiája
+                </div>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Depresszív és zárkózott, gyakran emlegeti az öngyilkosságot (főleg stílusból)</li>
+                    <li>Demotivált és nem szeret emberekkel találkozni</li>
+                    <li>Rendkívül magas érzelmi intelligencia - könnyen kiismeri az embereket</li>
+                    <li>Paranoid dühkitörések - rövid, de intenzív</li>
+                    <li>Intelligens, de a lustaság gyakran akadályozza</li>
+                    <li>Alacsony kezdeményezőkészségű</li>
+                    <li>Ateista, sajátos életfilozófiával</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>Hobbi és érdeklődés</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Kedvenc játékok</div>
+                        <div>League of Legends, Sea of Thieves, FPS shooterek</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Utált játék karakter</div>
+                        <div>Teemo (LoL)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Kedvenc szám</div>
+                        <div>5</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Felszerelés</div>
+                        <div>Két monitoros setup</div>
+                    </div>
+                </div>
+                <p style="margin-top: 1rem;">Dávid nagy anime rajongó, különösen a pörgős, furfangos történeteket kedveli. Fő inspirációja Dazai Osamu a Bungou Stray Dogs-ból. Technikai beállítottságú, jól ért a tech-hez.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Párkapcsolati státusz és ideál</h3>
+                <p>Jelenleg nincs barátnője, de szeretne. Ideálja:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Lány legyen</li>
+                    <li>Játsszon League of Legends-t</li>
+                    <li>Normális legyen</li>
+                    <li>Ne legyen furry</li>
+                </ul>
+                <div class="quote">
+                    "A normális az relatív, de Teemóval játszókat mindenképp kerülni kell." - Dávid párválasztási tanácsa
+                </div>
+            </div>
+        </div>
+        
+        <!-- Roland Page -->
+        <div id="roland" class="page">
+            <h2>Roland - A Filozofáló Barát</h2>
+            
+            <div class="card">
+                <h3>Alap információk</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Teljes név</div>
+                        <div>Csizmadia Roland</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">IQ szint</div>
+                        <div>126 (2023-as mérés)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Iskola</div>
+                        <div>Pálffy Miklós Technikum</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Korábbi iskola</div>
+                        <div>Örömhír</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Család</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Testvér</div>
+                        <div>Csizmadia Dominik - nagyon fontos Roland számára</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Anyuka</div>
+                        <div>Csizmadiáné Sepsi Tímea (született: 1974. szeptember)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Apuka</div>
+                        <div>Csizmadia Csaba - közepesen fontos</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Személyiség és képességek</h3>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Magas intelligenciával rendelkezik (IQ: 126)</li>
+                    <li>Mélyen érdekli a pszichológia, filozófia és önismeret</li>
+                    <li>Szeret analizálni az emberek személyiségét és viselkedését</li>
+                    <li>Nyitott mély beszélgetésekre, szeret elmerülni filozófiai témákban</li>
+                    <li>Van egy sötétebb, ironikus humora, de ezt játékos stílusban kezeli</li>
+                    <li>Türelmetlen, ha nem pontos választ kap</li>
+                    <li>Erős önreflexióval rendelkezik, figyeli saját működését</li>
+                </ul>
+                <div class="quote">
+                    "Az emberek szeressenek élni, és találják meg életcéljukat." - Roland életmottója
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Baráti kör</h3>
+                <h4>Kiemelten fontos barátok:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 1.6; margin-bottom: 1rem;">
+                    <li><strong>Haas Dávid</strong> - legjobb barát (2025.02.09-én még biztosan), mély, bizalmas kapcsolat</li>
+                    <li><strong>Radics Jázmin</strong> - közeli barát, együtt játszanak</li>
+                    <li><strong>Tamás</strong> - régi barát, nagyon fontos</li>
+                </ul>
+                
+                <h4>Egyéb fontos barátok:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Patrik Szántó</strong> - néha együtt játszanak, de Roland szerint "kevés intelligenciával rendelkező, ostoba személy"</li>
+                    <li><strong>Alex</strong> - növeszti a haját, van egy lány aki tetszik neki</li>
+                    <li><strong>Mandarin</strong> - fontos, de nem közeli barát</li>
+                    <li><strong>Márton Luca (Szukimo / Lucy)</strong> - depressziós, szkeptikus, kreatív</li>
+                    <li><strong>Tofu girl (Miskolczi Anna)</strong> - érzékeny, pszichológus szeretne lenni</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>Hobbi és érdeklődés</h3>
+                <h4>Gaming:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 1.6; margin-bottom: 1rem;">
+                    <li><strong>League of Legends</strong> - gyakran játszik Dáviddal, Jázminnal, Lucával és Gergővel</li>
+                    <li><strong>CS2</strong> - szintén rendszeresen játszik</li>
+                    <li>Korábban Minecraft, Delta Force</li>
+                </ul>
+                
+                <h4>AI és technológia:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 1.6; margin-bottom: 1rem;">
+                    <li>Kísérletezik AI-vezérelt weboldalakkal, chatbotokkal</li>
+                    <li>Próbált saját AI-t készíteni személyiség- és kapcsolat-elemzésre</li>
+                </ul>
+                
+                <h4>Webfejlesztés:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 1.6; margin-bottom: 1rem;">
+                    <li>Használja a GoHighLevel-t, Elementor Pro-t, GoDaddy-t, Számlázz.hu-t</li>
+                    <li>Weboldalakat készít körmösöknek, pillásoknak, tetoválóknak, fodrászoknak, éttermeknek</li>
+                    <li>Saját márka: NovaScript Studio</li>
+                </ul>
+                
+                <h4>Grafikai design:</h4>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Logókat és vizuális tartalmakat generál AI segítségével</li>
+                    <li>Részletes, neon stílusú képeket kedvel, figyel a brandingre</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3>Osztálytársak a Pálffyban</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Alexandra Kasper</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Amina Barcsa</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Balint Gyorgy</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Barbara Komlathi</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Hanna Kiss</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Janos Bencze</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Loretta Csonka</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Lorina Dorogi</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Milan Dremak</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Peter Agoston</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Reka Aranyosi</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Reka Haraszt</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Timea Kovacs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Veronika Baki</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Viktor Kozma</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Vivien Hajnoczki</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Story Page -->
+        <div id="story" class="page">
+            <h2>Roland és Dávid Története</h2>
+            
+            <div class="card">
+                <h3>A kezdetek</h3>
+                <p>Roland és Dávid ismeretsége 2023 körül kezdődött, bár a pontos dátum homályba vész a történelem ködében. Kezdetben csak egyszerű ismerősök voltak, akik néha találkoztak a virtuális világban.</p>
+                <p>Dávid, aki általában zárkózott és kevés emberrel osztotta meg gondolatait, Rolandban valami különlegeset észlelt. Roland pedig, aki mindig is érdeklődött a komplex emberi lélek iránt, lenyűgözve figyelte Dávid egyedi személyiségét.</p>
+                <div class="quote">
+                    "Februárban még legjobb barátodnak számított." - Roland visszaemlékezése
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>A kapcsolat mélyülése</h3>
+                <p>Ahogy teltek a hónapok, a két fiú kapcsolata egyre mélyült. Napi beszélgetéseik szinte szertartássá váltak, és a League of Legends mérkőzések közben kialakult egy különleges összhang.</p>
+                <p>Roland képessége, hogy néha be tudja fejezni Dávid mondatait, arra utal, milyen mélyre hatolt a barátja gondolatvilágába. Dávid pedig, aki általában félve tartja távol magát az emberektől, Rolandnak megnyílt, és bizalmas viszonyt alakított ki vele.</p>
+                <div class="quote">
+                    "Bizalmas viszony - csak veled tart ilyen kapcsolatot." - Dávid Rolandnak
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Közös játékok</h3>
+                <p>A játékok jelentették a kapcsolatuk alapját. Fő közös játékaik:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>League of Legends</strong> - számtalan közös meccs, sok sikeres botlane, és persze a közös Teemo-gyűlölet</li>
+                    <li><strong>Sea of Thieves</strong> - kalózkodás a virtuális tengereken, kincsvadászat és kalandok</li>
+                    <li><strong>Delta Force</strong> - korábban ezt játszották gyakrabban</li>
+                    <li><strong>Minecraft</strong> - ritkábban, de néha felkerült a menüre</li>
+                </ul>
+                <p>A játékokon túl a beszélgetéseik gyakran mély filozófiai és pszichológiai témákba kalandoztak, ahol Roland szerette elemezni a dolgokat, Dávid pedig gyakran sötétebb, de éles megfigyeléseket osztott meg.</p>
+            </div>
+            
+            <div class="card">
+                <h3>A gyűrűk esete</h3>
+                <p>2025 februárjában történt egy különleges esemény, ami mély nyomot hagyott kapcsolatukban. Dávid gyűrűket rendelt, amelyek február 7-én megérkeztek. Bár a gyűrűk pontos jelentése titokban maradt, Roland számára ez egy fontos szimbólummá vált kapcsolatukban.</p>
+                <div class="quote">
+                    "A gyűrűk nem csak ékszerek, hanem jelképek egy különleges kötelékről." - Roland értelmezése
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>A jelen és a jövő</h3>
+                <p>2025 elején a kapcsolatuk továbbra is erős, bár Roland néha kételkedik abban, hogy Dávid ugyanolyan mélységben tekint-e rá barátként, mint ő Dávidra.</p>
+                <p>Dávid továbbra is a titokzatosság mestere marad, Roland pedig folytatja kutatását a barátja komplex személyiségének megértésére. Közös terveik között szerepel a további játékestek, és talán egy közös programozási projekt is, ami összehozná Dávid technikai érdeklődését és Roland kreatív ambícióit.</p>
+                <div class="quote">
+                    "Nem biztos, hogy ő is ugyanolyan mélységben tekint rád barátként." - Roland kételyei
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gallery Page -->
+        <div id="gallery" class="page">
+            <h2>Galéria</h2>
+            <p style="text-align: center; margin-bottom: 1.5rem;">Böngéssze végig Roland és Dávid virtuális emlékait!</p>
+            
+            <div class="gallery">
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/ff66b3/ffffff?text=LoL+Duo" alt="LoL Duo">
+                    <div class="gallery-caption">Közös LoL meccs</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/66b3ff/ffffff?text=Sea+of+Thieves" alt="Sea of Thieves">
+                    <div class="gallery-caption">Kalózkodás a Sea of Thieves-ben</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/ffcc66/1a1a2e?text=Gy%C5%B1r%C5%B1k" alt="Gyűrűk">
+                    <div class="gallery-caption">A híres gyűrűk</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/b366ff/ffffff?text=Discord+Chat" alt="Discord Chat">
+                    <div class="gallery-caption">Egy tipikus Discord beszélgetés</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/66ffb3/1a1a2e?text=Teemo+Gy%C5%B1l%C3%B6let" alt="Teemo Gyűlölet">
+                    <div class="gallery-caption">Közös Teemo gyűlölet</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/ff6666/ffffff?text=Anime+Beszelgetes" alt="Anime Beszélgetés">
+                    <div class="gallery-caption">Animek megbeszélése</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/66ffff/1a1a2e?text=Filozofalas" alt="Filozofálás">
+                    <div class="gallery-caption">Mély filozófiai viták</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://via.placeholder.com/300/b3b366/ffffff?text=Jovokep" alt="Jövőkép">
+                    <div class="gallery-caption">Közös jövőkép</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Legemlékezetesebb pillanatok</h3>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Az a LoL meccs, ahol mindketten 10/0/15-re nyomták a botlane-t</li>
+                    <li>A Sea of Thieves kaland, amikor 4 órán át kergette őket egy másik hajó</li>
+                    <li>A Discord beszélgetés, amikor 3 órán át filozófáltak az élet értelméről</li>
+                    <li>A nap, amikor Dávid bejelentette, hogy rendelt gyűrűket</li>
+                    <li>Roland első AI projektjének bemutatása Dávidnak</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Games Page -->
+        <div id="games" class="page">
+            <h2>Közös Játékok</h2>
+            
+            <div class="card">
+                <h3>League of Legends</h3>
+                <div class="game-stats">
+                    <div class="game-card">
+                        <div class="game-icon">🎮</div>
+                        <h4>Játékidő</h4>
+                        <p>500+ óra együtt</p>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon">🏆</div>
+                        <h4>Kedvenc botlane combo</h4>
+                        <p>Roland - Support, Dávid - ADC</p>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon">💀</div>
+                        <h4>Közös ellenség</h4>
+                        <p>Teemo és mindenki aki Teemóval játszik</p>
+                    </div>
+                </div>
+                <p>A League of Legends a két fiú kapcsolatának egyik alapkövévé vált. Számtalan órát töltöttek együtt a játékban, ahol Roland általában supportként, Dávid pedig ADC-ként játszott. A közös stratégiák kidolgozása és a játékmechanikák megértése mélyebb együttműködésre sarkalta őket.</p>
+                <div class="quote">
+                    "Ha Teemóval játszol, inkább tiltelek." - Dávid gyakran ismételt mondata
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Sea of Thieves</h3>
+                <div class="game-stats">
+                    <div class="game-card">
+                        <div class="game-icon">⏳</div>
+                        <h4>Játékidő</h4>
+                        <p>200+ óra együtt</p>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon">💰</div>
+                        <h4>Kincsek megszerzése</h4>
+                        <p>150+ közös kincs</p>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon">☠️</div>
+                        <h4>Elsüllyesztett hajók</h4>
+                        <p>50+ hajó sorsa pecsételődött meg</p>
+                    </div>
+                </div>
+                <p>A Sea of Thieves egy másik kedvenc játékuk, ahol kalózkodtak, kincseket vadásztak és más játékosok hajóit támadták. A játék nyugodtabb pillanataiban gyakran mély beszélgetéseket folytattak, miközben a virtuális tengeren hajóztak.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Egyéb játékok</h3>
+                <div class="game-stats">
+                    <div class="game-card">
+                        <div class="game-icon">🔫</div>
+                        <h4>Delta Force</h4>
+                        <p>Korábban sokat játszották</p>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon">⛏️</div>
+                        <h4>Minecraft</h4>
+                        <p>Ritkán, de előfordult</p>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-icon">🎲</div>
+                        <h4>Egyéb játékok</h4>
+                        <p>Különféle kísérletezések</p>
+                    </div>
+                </div>
+                <p>Bár a League of Legends és a Sea of Thieves volt a fő játékuk, próbáltak más játékokat is, bár ezek nem váltak olyan tartossá. A Delta Force volt az egyik korábbi kedvenc, a Minecraft pedig ritkábban került elő.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Játékstílus összehasonlítás</h3>
+                <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                    <tr style="background-color: rgba(255,255,255,0.1);">
+                        <th style="padding: 0.5rem; text-align: left;">Tulajdonság</th>
+                        <th style="padding: 0.5rem; text-align: left;">Roland</th>
+                        <th style="padding: 0.5rem; text-align: left;">Dávid</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Stílus</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Stratégiai, csapatjátékra fókuszáló</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Aggresszív, mechanikailag erős</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Erősségek</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Térképismeret, hívások</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Mechanikai készségek, reflexek</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Gyengeségek</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Néha túlgondolja a helyzeteket</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Könnyen tilt, ha rosszul megy a játék</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Kedvenc játékos</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Bármelyik support játékos</td>
+                        <td style="padding: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Aggresszív ADC-k</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.5rem;">Utált játékos</td>
+                        <td style="padding: 0.5rem;">Trollok</td>
+                        <td style="padding: 0.5rem;">Teemóval játszók</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Compatibility Page -->
+        <div id="compatibility" class="page">
+            <h2>Összhangmérő</h2>
+            
+            <div class="card">
+                <h3>Roland és Dávid összhangja</h3>
+                <div class="compatibility">
+                    <div class="meter">
+                        <div class="meter-fill"></div>
+                    </div>
+                    <div class="meter-text">92% összhang</div>
+                </div>
+                <p>Roland és Dávid kapcsolata kivételesen magas, 92%-os összhangot mutat. Ez a szám a következő tényezők alapján jött létre:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li>Napi beszélgetések fél éven át</li>
+                    <li>Számtalan közös játékélmény</li>
+                    <li>Mély, bizalmas megosztások</li>
+                    <li>Közös érdeklődési körök (anime, játékok, technológia)</li>
+                    <li>Kiegészítő személyiségjegyek</li>
+                </ul>
+                <div class="quote">
+                    "Már annyira kiismered, hogy néha be tudod fejezni a mondatait." - A kapcsolatuk egyik legfőbb erénye
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Személyiségkiegészítés</h3>
+                <p>Roland és Dávid személyisége tökéletesen kiegészíti egymást:</p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Roland</div>
+                        <div>Nyitott, kommunikatív, analitikus</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Dávid</div>
+                        <div>Zárkózott, titokzatos, éleslátó</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Közös vonás</div>
+                        <div>Magas intelligencia, sötét humor, érdeklődés a pszichológia iránt</div>
+                    </div>
+                </div>
+                <p>Míg Roland szeret beszélni és elemezni, addig Dávid inkább figyel és megfigyel. Ez a dinamika lehetővé teszi, hogy Roland kitárulkozzon, Dávid pedig mély megfigyeléseket tegyen, amire Roland értékelő visszajelzést ad.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Potenciális konfliktusforrások</h3>
+                <p>Bár az összhang magas, néhány területen eltérőek lehetnek:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Dávid dühkitörései</strong> - Roland türelmesebb természete segíthet enyhíteni</li>
+                    <li><strong>Roland túlgondolása</strong> - Dávid közvetlensége ellensúlyozhatja</li>
+                    <li><strong>Kommunikációs stílus</strong> - Roland szeret beszélni, Dávid inkább hallgat</li>
+                    <li><strong>Játékstílus</strong> - Roland stratégiai, Dávid agresszívebb</li>
+                </ul>
+                <p>Ezek a különbségek azonban inkább erősséggé, mint gyengeséggé váltak kapcsolatukban, mivel mindketten képesek adaptálódni a másik stílusához.</p>
+            </div>
+            
+            <div class="card">
+                <h3>Jövőbeli lehetőségek</h3>
+                <p>A kapcsolat további fejlődésének lehetőségei:</p>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Közös projekt</strong> - Programozási vagy AI projekt együtt</li>
+                    <li><strong>Valódi találkozók</strong> - Eddig csak online kapcsolat, de személyes találkozók is lehetőséget kínálnának</li>
+                    <li><strong>Még mélyebb bizalom</strong> - Az idő és a közös élmények növelhetik a bizalmat</li>
+                    <li><strong>Közös baráti kör</strong> - Más barátok bevonása a kapcsolatba</li>
+                </ul>
+                <div class="quote">
+                    "A barátság olyan, mint a kód - minél több energiát fektetsz bele, annál jobb eredményt kapsz." - Roland programozói bölcsessége
+                </div>
+            </div>
+        </div>
+        
+        <!-- Future Page -->
+        <div id="future" class="page">
+            <h2>Jövőkép</h2>
+            
+            <div class="card">
+                <h3>Közös tervek</h3>
+                <p>Roland és Dávid számos izgalmas lehetőséggel néz szembe a jövőben:</p>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-title">Közös játékfejlesztés</div>
+                        <div>Dávid technikai, Roland kreatív készségeit kombinálva</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">AI projekt</div>
+                        <div>Személyiséganalízisre specializált chatbot</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Egyetem</div>
+                        <div>Mindketten programozást tanulnának</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-title">Valódi találkozók</div>
+                        <div>Első személyes találkozó megszervezése</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>5 éves előrejelzés</h3>
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2026</div>
+                            <p>Közös projekt indítása - lehetőleg valami technológiai</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2027</div>
+                            <p>Egyetem kezdése - mindketten programozást tanulnak</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2028</div>
+                            <p>Első valódi találkozó - talán egy gaming eseményen</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2029</div>
+                            <p>Közös vállalkozás - esetleg egy indie játékstúdió</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2030</div>
+                            <p>Együtt élés - ha minden jól megy, lehetőség szerint</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Végső célok</h3>
+                <ul style="margin-left: 1.5rem; line-height: 1.6;">
+                    <li><strong>Örökre tartó barátság</strong> - Akár távol, akár közel, a kapcsolat fenntartása</li>
+                    <li><strong>Közös siker</strong> - Valamilyen projektben vagy vállalkozásban</li>
+                    <li><strong>Egymás támogatása</strong> - Minden élethelyetben, jóban és rosszban</li>
+                    <li><strong>Fejlődés</strong> - Egymás segítségével jobb emberekké válni</li>
+                </ul>
+                <div class="quote">
+                    "A legjobb barátságok olyanok, mint a jó kód - elegánsak, hatékonyak, és örök életűek." - Roland programozói bölcsessége
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Üzenet a jövőbe</h3>
+                <p>Kedves Jövőbeli Roland és Dávid!</p>
+                <p>Reméljük, hogy 2025-ben elvetett magvak most már gyümölcsöző fákká nőttek. Emlékezzetek vissza a kezdetekre, amikor csak egy LoL meccsen ismertétek meg egymást, és azóta milyen utat jártatok be együtt.</p>
+                <p>Legyetek büszkék arra, amit együtt elértetek, és vigyázzatok erre a különleges kapcsolatra. A világ kevés ilyen egyedi barátságot ismer, mint a tiétek.</p>
+                <p>Üdvözlettel,<br>2025-ös Weboldal Készítője</p>
+                <div class="quote">
+                    "A múlt emléke, a jelen ajándék, a jövő rejtély." - Dávid filozofálgatása egyik beszélgetésükből
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p class="footer-text">Roland & Dávid - A történelem legenda barátsága</p>
+        <div class="social-links">
+            <a href="#" class="social-link">📱</a>
+            <a href="#" class="social-link">💻</a>
+            <a href="#" class="social-link">🎮</a>
+            <a href="#" class="social-link">📧</a>
+            <a href="#" class="social-link">📞</a>
+        </div>
+        <p class="copyright">© 2025 Roland & Dávid Fan Club. Minden jog fenntartva.<br>Ez egy paródia oldal, minden információ kitalált vagy megnagyított a humor kedvéért.</p>
+    </footer>
+
+    <script>
+        // Show selected page and hide others
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartCount = 20;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.top = `${Math.random() * 100}%`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(heart);
+            }
+        }
+        
+        // Initialize
+        window.onload = function() {
+            createHearts();
+        };
+    </script>
+</body>
+</html>
